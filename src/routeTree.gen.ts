@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as StationsRouteImport } from './routes/stations'
 import { Route as LogsRouteImport } from './routes/logs'
 import { Route as LiveRouteImport } from './routes/live'
+import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as IndexRouteImport } from './routes/index'
 
 const StationsRoute = StationsRouteImport.update({
@@ -29,6 +30,11 @@ const LiveRoute = LiveRouteImport.update({
   path: '/live',
   getParentRoute: () => rootRouteImport,
 } as any)
+const InsightsRoute = InsightsRouteImport.update({
+  id: '/insights',
+  path: '/insights',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -37,12 +43,14 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/insights': typeof InsightsRoute
   '/live': typeof LiveRoute
   '/logs': typeof LogsRoute
   '/stations': typeof StationsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/insights': typeof InsightsRoute
   '/live': typeof LiveRoute
   '/logs': typeof LogsRoute
   '/stations': typeof StationsRoute
@@ -50,20 +58,22 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/insights': typeof InsightsRoute
   '/live': typeof LiveRoute
   '/logs': typeof LogsRoute
   '/stations': typeof StationsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/live' | '/logs' | '/stations'
+  fullPaths: '/' | '/insights' | '/live' | '/logs' | '/stations'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/live' | '/logs' | '/stations'
-  id: '__root__' | '/' | '/live' | '/logs' | '/stations'
+  to: '/' | '/insights' | '/live' | '/logs' | '/stations'
+  id: '__root__' | '/' | '/insights' | '/live' | '/logs' | '/stations'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  InsightsRoute: typeof InsightsRoute
   LiveRoute: typeof LiveRoute
   LogsRoute: typeof LogsRoute
   StationsRoute: typeof StationsRoute
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LiveRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/insights': {
+      id: '/insights'
+      path: '/insights'
+      fullPath: '/insights'
+      preLoaderRoute: typeof InsightsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -104,6 +121,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  InsightsRoute: InsightsRoute,
   LiveRoute: LiveRoute,
   LogsRoute: LogsRoute,
   StationsRoute: StationsRoute,
