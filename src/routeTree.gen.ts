@@ -19,6 +19,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicHooksTranscribeRouteImport } from './routes/api/public/hooks/transcribe'
 import { Route as ApiPublicHooksSegmentDayRouteImport } from './routes/api/public/hooks/segment-day'
 import { Route as ApiPublicHooksSegmentRouteImport } from './routes/api/public/hooks/segment'
+import { Route as ApiPublicHooksDailyDigestRouteImport } from './routes/api/public/hooks/daily-digest'
 
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
@@ -72,6 +73,12 @@ const ApiPublicHooksSegmentRoute = ApiPublicHooksSegmentRouteImport.update({
   path: '/api/public/hooks/segment',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksDailyDigestRoute =
+  ApiPublicHooksDailyDigestRouteImport.update({
+    id: '/api/public/hooks/daily-digest',
+    path: '/api/public/hooks/daily-digest',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -81,6 +88,7 @@ export interface FileRoutesByFullPath {
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
+  '/api/public/hooks/daily-digest': typeof ApiPublicHooksDailyDigestRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
   '/api/public/hooks/segment-day': typeof ApiPublicHooksSegmentDayRoute
   '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
@@ -93,6 +101,7 @@ export interface FileRoutesByTo {
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
+  '/api/public/hooks/daily-digest': typeof ApiPublicHooksDailyDigestRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
   '/api/public/hooks/segment-day': typeof ApiPublicHooksSegmentDayRoute
   '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
@@ -106,6 +115,7 @@ export interface FileRoutesById {
   '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
+  '/api/public/hooks/daily-digest': typeof ApiPublicHooksDailyDigestRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
   '/api/public/hooks/segment-day': typeof ApiPublicHooksSegmentDayRoute
   '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
@@ -120,6 +130,7 @@ export interface FileRouteTypes {
     | '/recordings'
     | '/settings'
     | '/stations'
+    | '/api/public/hooks/daily-digest'
     | '/api/public/hooks/segment'
     | '/api/public/hooks/segment-day'
     | '/api/public/hooks/transcribe'
@@ -132,6 +143,7 @@ export interface FileRouteTypes {
     | '/recordings'
     | '/settings'
     | '/stations'
+    | '/api/public/hooks/daily-digest'
     | '/api/public/hooks/segment'
     | '/api/public/hooks/segment-day'
     | '/api/public/hooks/transcribe'
@@ -144,6 +156,7 @@ export interface FileRouteTypes {
     | '/recordings'
     | '/settings'
     | '/stations'
+    | '/api/public/hooks/daily-digest'
     | '/api/public/hooks/segment'
     | '/api/public/hooks/segment-day'
     | '/api/public/hooks/transcribe'
@@ -157,6 +170,7 @@ export interface RootRouteChildren {
   RecordingsRoute: typeof RecordingsRoute
   SettingsRoute: typeof SettingsRoute
   StationsRoute: typeof StationsRoute
+  ApiPublicHooksDailyDigestRoute: typeof ApiPublicHooksDailyDigestRoute
   ApiPublicHooksSegmentRoute: typeof ApiPublicHooksSegmentRoute
   ApiPublicHooksSegmentDayRoute: typeof ApiPublicHooksSegmentDayRoute
   ApiPublicHooksTranscribeRoute: typeof ApiPublicHooksTranscribeRoute
@@ -234,6 +248,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksSegmentRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/daily-digest': {
+      id: '/api/public/hooks/daily-digest'
+      path: '/api/public/hooks/daily-digest'
+      fullPath: '/api/public/hooks/daily-digest'
+      preLoaderRoute: typeof ApiPublicHooksDailyDigestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -245,6 +266,7 @@ const rootRouteChildren: RootRouteChildren = {
   RecordingsRoute: RecordingsRoute,
   SettingsRoute: SettingsRoute,
   StationsRoute: StationsRoute,
+  ApiPublicHooksDailyDigestRoute: ApiPublicHooksDailyDigestRoute,
   ApiPublicHooksSegmentRoute: ApiPublicHooksSegmentRoute,
   ApiPublicHooksSegmentDayRoute: ApiPublicHooksSegmentDayRoute,
   ApiPublicHooksTranscribeRoute: ApiPublicHooksTranscribeRoute,
