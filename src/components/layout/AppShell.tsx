@@ -1,11 +1,12 @@
 import { Link, Outlet, useRouterState } from "@tanstack/react-router";
-import { LayoutDashboard, Radio, FileText, Activity, Sparkles, Settings, Waves } from "lucide-react";
+import { LayoutDashboard, Radio, FileText, Activity, Sparkles, Settings, Waves, Mic } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/sonner";
 
 const NAV = [
   { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
   { to: "/stations", label: "Stations", icon: Radio },
+  { to: "/recordings", label: "Recordings", icon: Mic },
   { to: "/logs", label: "Daily Logs", icon: FileText },
   { to: "/live", label: "Live Monitor", icon: Activity },
   { to: "/insights", label: "AI Insights", icon: Sparkles },
