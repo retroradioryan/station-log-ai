@@ -1,0 +1,14 @@
+{
+  "name": "station-log-ingestion-worker",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "worker.js",
+  "scripts": {
+    "start": "node worker.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "node-cron": "^3.0.3"
+  }
+}

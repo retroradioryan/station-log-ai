@@ -15,6 +15,8 @@ import { Route as LogsRouteImport } from './routes/logs'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ApiPublicHooksTranscribeRouteImport } from './routes/api/public/hooks/transcribe'
+import { Route as ApiPublicHooksSegmentRouteImport } from './routes/api/public/hooks/segment'
 
 const StationsRoute = StationsRouteImport.update({
   id: '/stations',
@@ -46,6 +48,17 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicHooksTranscribeRoute =
+  ApiPublicHooksTranscribeRouteImport.update({
+    id: '/api/public/hooks/transcribe',
+    path: '/api/public/hooks/transcribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiPublicHooksSegmentRoute = ApiPublicHooksSegmentRouteImport.update({
+  id: '/api/public/hooks/segment',
+  path: '/api/public/hooks/segment',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +67,8 @@ export interface FileRoutesByFullPath {
   '/logs': typeof LogsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
+  '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
+  '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +77,8 @@ export interface FileRoutesByTo {
   '/logs': typeof LogsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
+  '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
+  '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,12 +88,30 @@ export interface FileRoutesById {
   '/logs': typeof LogsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
+  '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
+  '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/insights' | '/live' | '/logs' | '/settings' | '/stations'
+  fullPaths:
+    | '/'
+    | '/insights'
+    | '/live'
+    | '/logs'
+    | '/settings'
+    | '/stations'
+    | '/api/public/hooks/segment'
+    | '/api/public/hooks/transcribe'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/insights' | '/live' | '/logs' | '/settings' | '/stations'
+  to:
+    | '/'
+    | '/insights'
+    | '/live'
+    | '/logs'
+    | '/settings'
+    | '/stations'
+    | '/api/public/hooks/segment'
+    | '/api/public/hooks/transcribe'
   id:
     | '__root__'
     | '/'
@@ -85,6 +120,8 @@ export interface FileRouteTypes {
     | '/logs'
     | '/settings'
     | '/stations'
+    | '/api/public/hooks/segment'
+    | '/api/public/hooks/transcribe'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -94,6 +131,8 @@ export interface RootRouteChildren {
   LogsRoute: typeof LogsRoute
   SettingsRoute: typeof SettingsRoute
   StationsRoute: typeof StationsRoute
+  ApiPublicHooksSegmentRoute: typeof ApiPublicHooksSegmentRoute
+  ApiPublicHooksTranscribeRoute: typeof ApiPublicHooksTranscribeRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -140,6 +179,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/transcribe': {
+      id: '/api/public/hooks/transcribe'
+      path: '/api/public/hooks/transcribe'
+      fullPath: '/api/public/hooks/transcribe'
+      preLoaderRoute: typeof ApiPublicHooksTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/hooks/segment': {
+      id: '/api/public/hooks/segment'
+      path: '/api/public/hooks/segment'
+      fullPath: '/api/public/hooks/segment'
+      preLoaderRoute: typeof ApiPublicHooksSegmentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -150,6 +203,8 @@ const rootRouteChildren: RootRouteChildren = {
   LogsRoute: LogsRoute,
   SettingsRoute: SettingsRoute,
   StationsRoute: StationsRoute,
+  ApiPublicHooksSegmentRoute: ApiPublicHooksSegmentRoute,
+  ApiPublicHooksTranscribeRoute: ApiPublicHooksTranscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
