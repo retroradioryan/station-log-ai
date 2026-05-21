@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as StationsRouteImport } from './routes/stations'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as RecordingsRouteImport } from './routes/recordings'
 import { Route as LogsRouteImport } from './routes/logs'
 import { Route as LiveRouteImport } from './routes/live'
 import { Route as InsightsRouteImport } from './routes/insights'
@@ -26,6 +27,11 @@ const StationsRoute = StationsRouteImport.update({
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RecordingsRoute = RecordingsRouteImport.update({
+  id: '/recordings',
+  path: '/recordings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LogsRoute = LogsRouteImport.update({
@@ -65,6 +71,7 @@ export interface FileRoutesByFullPath {
   '/insights': typeof InsightsRoute
   '/live': typeof LiveRoute
   '/logs': typeof LogsRoute
+  '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
@@ -75,6 +82,7 @@ export interface FileRoutesByTo {
   '/insights': typeof InsightsRoute
   '/live': typeof LiveRoute
   '/logs': typeof LogsRoute
+  '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
@@ -86,6 +94,7 @@ export interface FileRoutesById {
   '/insights': typeof InsightsRoute
   '/live': typeof LiveRoute
   '/logs': typeof LogsRoute
+  '/recordings': typeof RecordingsRoute
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
@@ -98,6 +107,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/live'
     | '/logs'
+    | '/recordings'
     | '/settings'
     | '/stations'
     | '/api/public/hooks/segment'
@@ -108,6 +118,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/live'
     | '/logs'
+    | '/recordings'
     | '/settings'
     | '/stations'
     | '/api/public/hooks/segment'
@@ -118,6 +129,7 @@ export interface FileRouteTypes {
     | '/insights'
     | '/live'
     | '/logs'
+    | '/recordings'
     | '/settings'
     | '/stations'
     | '/api/public/hooks/segment'
@@ -129,6 +141,7 @@ export interface RootRouteChildren {
   InsightsRoute: typeof InsightsRoute
   LiveRoute: typeof LiveRoute
   LogsRoute: typeof LogsRoute
+  RecordingsRoute: typeof RecordingsRoute
   SettingsRoute: typeof SettingsRoute
   StationsRoute: typeof StationsRoute
   ApiPublicHooksSegmentRoute: typeof ApiPublicHooksSegmentRoute
@@ -149,6 +162,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/recordings': {
+      id: '/recordings'
+      path: '/recordings'
+      fullPath: '/recordings'
+      preLoaderRoute: typeof RecordingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/logs': {
@@ -201,6 +221,7 @@ const rootRouteChildren: RootRouteChildren = {
   InsightsRoute: InsightsRoute,
   LiveRoute: LiveRoute,
   LogsRoute: LogsRoute,
+  RecordingsRoute: RecordingsRoute,
   SettingsRoute: SettingsRoute,
   StationsRoute: StationsRoute,
   ApiPublicHooksSegmentRoute: ApiPublicHooksSegmentRoute,
@@ -209,13 +230,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
