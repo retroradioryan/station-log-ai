@@ -79,10 +79,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "Station Log" },
       { property: "og:title", content: "Station Log — AI Radio Monitoring" },
 
-      { property: "og:description", content: "Lovable Generated Project" },
+      { property: "og:description", content: "Newsroom-grade AI radio monitoring: record, transcribe and log live stations." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
+      { name: "twitter:title", content: "Station Log — AI Radio Monitoring" },
+      { name: "twitter:description", content: "Newsroom-grade AI radio monitoring: record, transcribe and log live stations." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9959d3ca-7a41-4916-a38e-a19ca8d6b8ce/id-preview-f384b78c--8e8dd1cc-34ba-4796-912a-b747d6b6fa2e.lovable.app-1779399470389.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/9959d3ca-7a41-4916-a38e-a19ca8d6b8ce/id-preview-f384b78c--8e8dd1cc-34ba-4796-912a-b747d6b6fa2e.lovable.app-1779399470389.png" },
     ],
     links: [
       {
