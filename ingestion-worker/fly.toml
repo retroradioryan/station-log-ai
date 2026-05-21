@@ -1,0 +1,21 @@
+# Fly.io config for the Station Log ingestion worker.
+# Deploy:
+#   cd ingestion-worker
+#   fly launch --no-deploy --copy-config --name station-log-ingestion
+#   fly secrets set SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... APP_URL=https://project--<id>.lovable.app
+#   fly deploy
+
+app = "station-log-ingestion"
+primary_region = "lhr"   # London — pick closest to your stations
+
+[build]
+  dockerfile = "Dockerfile"
+
+[env]
+  TZ = "Europe/Dublin"
+
+# Always-on single machine. No HTTP service — this is a background worker.
+[[vm]]
+  cpu_kind = "shared"
+  cpus = 1
+  memory_mb = 512
