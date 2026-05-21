@@ -98,8 +98,9 @@ function formatHMS(secs: number) {
   return `${h}:${m}:${s}`;
 }
 
-const VALID = new Set(["news","interview","music","ad","sports","weather","travel","listener_call","political","entertainment","discussion","other"]);
-function normalizeType(t: unknown): string {
-  const v = String(t ?? "").toLowerCase().replace(/[\s-]+/g, "_");
-  return VALID.has(v) ? v : "other";
+type SegmentType = "news"|"interview"|"music"|"ad"|"sports"|"weather"|"travel"|"listener_call"|"political"|"entertainment"|"discussion"|"other";
+const VALID: SegmentType[] = ["news","interview","music","ad","sports","weather","travel","listener_call","political","entertainment","discussion","other"];
+function normalizeType(t: unknown): SegmentType {
+  const v = String(t ?? "").toLowerCase().replace(/[\s-]+/g, "_") as SegmentType;
+  return (VALID as string[]).includes(v) ? v : "other";
 }
