@@ -7,6 +7,8 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
+import { AppShell } from "@/components/layout/AppShell";
+
 
 import appCss from "../styles.css?url";
 
