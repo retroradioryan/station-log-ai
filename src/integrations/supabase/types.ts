@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      capture_requests: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          duration_seconds: number
+          error: string | null
+          id: string
+          picked_up_at: string | null
+          recording_id: string | null
+          station_id: string
+          status: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          duration_seconds?: number
+          error?: string | null
+          id?: string
+          picked_up_at?: string | null
+          recording_id?: string | null
+          station_id: string
+          status?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          duration_seconds?: number
+          error?: string | null
+          id?: string
+          picked_up_at?: string | null
+          recording_id?: string | null
+          station_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
       daily_reports: {
         Row: {
           created_at: string
