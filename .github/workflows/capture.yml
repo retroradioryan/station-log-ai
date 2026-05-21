@@ -1,0 +1,47 @@
+name: Capture radio
+
+on:
+  schedule:
+    # Every 5 minutes. GitHub may delay by a few minutes under load —
+    # the script's 5-min window match still picks the right stations.
+    - cron: "*/5 * * * *"
+  workflow_dispatch:
+    inputs:
+      station_id:
+        description: "Station UUID (leave empty for scheduled behaviour)"
+        required: false
+      duration_seconds:
+        description: "Capture duration in seconds (only used with station_id)"
+        required: false
+        default: "60"
+
+# Allow long-running captures (up to 6h per GitHub limit).
+# Multiple ticks can overlap when a capture is still running.
+concurrency:
+  group: capture-${{ github.event.inputs.station_id || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350  # under GitHub's 360-min hard cap
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Install ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y ffmpeg
+      - name: Install deps
+        working-directory: ingestion-worker
+        run: npm install --omit=dev
+      - name: Run capture
+        working-directory: ingestion-worker
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          APP_URL: ${{ secrets.APP_URL }}
+          TZ: Europe/Dublin
+          CAPTURE_STATION_ID: ${{ github.event.inputs.station_id }}
+          CAPTURE_DURATION_SECONDS: ${{ github.event.inputs.duration_seconds }}
+        run: node gh-action-capture.js
