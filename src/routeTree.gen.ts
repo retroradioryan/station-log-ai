@@ -17,6 +17,7 @@ import { Route as LiveRouteImport } from './routes/live'
 import { Route as InsightsRouteImport } from './routes/insights'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as ApiPublicHooksTranscribeRouteImport } from './routes/api/public/hooks/transcribe'
+import { Route as ApiPublicHooksSegmentDayRouteImport } from './routes/api/public/hooks/segment-day'
 import { Route as ApiPublicHooksSegmentRouteImport } from './routes/api/public/hooks/segment'
 
 const StationsRoute = StationsRouteImport.update({
@@ -60,6 +61,12 @@ const ApiPublicHooksTranscribeRoute =
     path: '/api/public/hooks/transcribe',
     getParentRoute: () => rootRouteImport,
   } as any)
+const ApiPublicHooksSegmentDayRoute =
+  ApiPublicHooksSegmentDayRouteImport.update({
+    id: '/api/public/hooks/segment-day',
+    path: '/api/public/hooks/segment-day',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiPublicHooksSegmentRoute = ApiPublicHooksSegmentRouteImport.update({
   id: '/api/public/hooks/segment',
   path: '/api/public/hooks/segment',
@@ -75,6 +82,7 @@ export interface FileRoutesByFullPath {
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
+  '/api/public/hooks/segment-day': typeof ApiPublicHooksSegmentDayRoute
   '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
 }
 export interface FileRoutesByTo {
@@ -86,6 +94,7 @@ export interface FileRoutesByTo {
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
+  '/api/public/hooks/segment-day': typeof ApiPublicHooksSegmentDayRoute
   '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
 }
 export interface FileRoutesById {
@@ -98,6 +107,7 @@ export interface FileRoutesById {
   '/settings': typeof SettingsRoute
   '/stations': typeof StationsRoute
   '/api/public/hooks/segment': typeof ApiPublicHooksSegmentRoute
+  '/api/public/hooks/segment-day': typeof ApiPublicHooksSegmentDayRoute
   '/api/public/hooks/transcribe': typeof ApiPublicHooksTranscribeRoute
 }
 export interface FileRouteTypes {
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/stations'
     | '/api/public/hooks/segment'
+    | '/api/public/hooks/segment-day'
     | '/api/public/hooks/transcribe'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -122,6 +133,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/stations'
     | '/api/public/hooks/segment'
+    | '/api/public/hooks/segment-day'
     | '/api/public/hooks/transcribe'
   id:
     | '__root__'
@@ -133,6 +145,7 @@ export interface FileRouteTypes {
     | '/settings'
     | '/stations'
     | '/api/public/hooks/segment'
+    | '/api/public/hooks/segment-day'
     | '/api/public/hooks/transcribe'
   fileRoutesById: FileRoutesById
 }
@@ -145,6 +158,7 @@ export interface RootRouteChildren {
   SettingsRoute: typeof SettingsRoute
   StationsRoute: typeof StationsRoute
   ApiPublicHooksSegmentRoute: typeof ApiPublicHooksSegmentRoute
+  ApiPublicHooksSegmentDayRoute: typeof ApiPublicHooksSegmentDayRoute
   ApiPublicHooksTranscribeRoute: typeof ApiPublicHooksTranscribeRoute
 }
 
@@ -206,6 +220,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiPublicHooksTranscribeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/hooks/segment-day': {
+      id: '/api/public/hooks/segment-day'
+      path: '/api/public/hooks/segment-day'
+      fullPath: '/api/public/hooks/segment-day'
+      preLoaderRoute: typeof ApiPublicHooksSegmentDayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/hooks/segment': {
       id: '/api/public/hooks/segment'
       path: '/api/public/hooks/segment'
@@ -225,8 +246,19 @@ const rootRouteChildren: RootRouteChildren = {
   SettingsRoute: SettingsRoute,
   StationsRoute: StationsRoute,
   ApiPublicHooksSegmentRoute: ApiPublicHooksSegmentRoute,
+  ApiPublicHooksSegmentDayRoute: ApiPublicHooksSegmentDayRoute,
   ApiPublicHooksTranscribeRoute: ApiPublicHooksTranscribeRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
