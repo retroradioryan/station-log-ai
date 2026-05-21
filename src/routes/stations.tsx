@@ -42,7 +42,7 @@ function StationDialog({ station, onClose }: { station?: any; onClose: () => voi
     mutationFn: async () => {
       const parsed = stationSchema.safeParse(form);
       if (!parsed.success) throw new Error(parsed.error.errors[0].message);
-      const payload = { ...parsed.data, tags: form.tags.split(",").map((t) => t.trim()).filter(Boolean) };
+      const payload = { ...parsed.data, tags: form.tags.split(",").map((t: string) => t.trim()).filter(Boolean) };
       if (station) {
         const { error } = await supabase.from("stations").update(payload).eq("id", station.id);
         if (error) throw error;
