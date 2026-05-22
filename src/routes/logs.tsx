@@ -17,6 +17,7 @@ export const Route = createFileRoute("/logs")({ component: Logs });
 
 function Logs() {
   const [date, setDate] = useState(today());
+  const [pdfLoading, setPdfLoading] = useState(false);
   const [q, setQ] = useState("");
   const { data: segments = [] } = useQuery({
     queryKey: ["segments", date],
