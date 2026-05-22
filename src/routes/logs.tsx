@@ -82,6 +82,95 @@ function Logs() {
     toast.success("Log copied");
   };
 
+  const exportPdf = async () => {
+    if (byStation.length === 0) { toast.error("No segments to export"); return; }
+    setPdfLoading(true);
+    try {
+      // Get AI editorial analysis
+      let analysis = "";
+      try {
+        const { data } = await supabase.functions.invoke("generate-daily-report", { body: { date } });
+        analysis = (data as any)?.summary ?? "";
+      } catch { /* analysis optional */ }
+
+      const doc = new jsPDF({ unit: "pt", format: "a4" });
+      const W = doc.internal.pageSize.getWidth();
+      const M = 40;
+
+      // Cover
+      doc.setFont("helvetica", "bold"); doc.setFontSize(22);
+      doc.text("Station Log — Daily Report", M, 60);
+      doc.setFont("helvetica", "normal"); doc.setFontSize(11); doc.setTextColor(110);
+      doc.text(fmtDate(date), M, 80);
+      doc.text(`${byStation.length} stations · ${filtered.length} segments`, M, 96);
+      doc.setDrawColor(220); doc.line(M, 110, W - M, 110);
+      doc.setTextColor(20);
+
+      let y = 130;
+      if (analysis) {
+        doc.setFont("helvetica", "bold"); doc.setFontSize(13);
+        doc.text("Editorial Analysis", M, y); y += 16;
+        doc.setFont("helvetica", "normal"); doc.setFontSize(10); doc.setTextColor(60);
+        const plain = analysis.replace(/[*_#`>]/g, "").replace(/\n{3,}/g, "\n\n");
+        const lines = doc.splitTextToSize(plain, W - M * 2);
+        doc.text(lines, M, y);
+        y += lines.length * 12 + 12;
+        doc.setTextColor(20);
+      }
+
+      // Per-station tables
+      byStation.forEach(({ station, items }) => {
+        if (y > 700) { doc.addPage(); y = 60; }
+        doc.setFont("helvetica", "bold"); doc.setFontSize(12);
+        doc.setTextColor(20);
+        doc.text(station?.name ?? "Station", M, y);
+        doc.setFont("helvetica", "normal"); doc.setFontSize(9); doc.setTextColor(120);
+        doc.text(`${items.length} segments`, W - M, y, { align: "right" });
+        y += 8;
+        autoTable(doc, {
+          startY: y,
+          head: [["Time", "Type", "Segment", "People / Topics", "Conf."]],
+          body: items.map((s: any) => [
+            fmtTime(s.segment_time),
+            SEGMENT_LABEL[s.segment_type] ?? s.segment_type,
+            (s.title || "") + (s.summary ? `\n${s.summary}` : ""),
+            [...(s.people || []).slice(0, 4), ...(s.topics || []).slice(0, 4)].join(", "),
+            s.confidence ? `${Math.round(s.confidence * 100)}%` : "—",
+          ]),
+          styles: { fontSize: 8, cellPadding: 5, valign: "top", textColor: 30 },
+          headStyles: { fillColor: [30, 30, 40], textColor: 255, fontStyle: "bold", fontSize: 8 },
+          alternateRowStyles: { fillColor: [248, 248, 250] },
+          columnStyles: {
+            0: { cellWidth: 50, fontStyle: "bold" },
+            1: { cellWidth: 70 },
+            2: { cellWidth: 240 },
+            3: { cellWidth: 130, textColor: 100 },
+            4: { cellWidth: "auto", halign: "right" },
+          },
+          margin: { left: M, right: M },
+        });
+        // @ts-expect-error lastAutoTable is added by plugin
+        y = doc.lastAutoTable.finalY + 24;
+      });
+
+      // Footer page numbers
+      const pages = doc.getNumberOfPages();
+      for (let i = 1; i <= pages; i++) {
+        doc.setPage(i);
+        doc.setFontSize(8); doc.setTextColor(150);
+        doc.text(`Station Log · ${fmtDate(date)}`, M, doc.internal.pageSize.getHeight() - 20);
+        doc.text(`${i} / ${pages}`, W - M, doc.internal.pageSize.getHeight() - 20, { align: "right" });
+      }
+
+      doc.save(`station-log-${date}.pdf`);
+      toast.success("PDF downloaded");
+    } catch (e: any) {
+      toast.error(e?.message ?? "PDF export failed");
+    } finally {
+      setPdfLoading(false);
+    }
+  };
+
   return (
     <>
       <PageHeader
