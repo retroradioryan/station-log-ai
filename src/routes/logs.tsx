@@ -181,7 +181,11 @@ function Logs() {
             <Button variant="outline" size="sm" onClick={copyAll}><Copy className="size-4" /> Copy</Button>
             <Button variant="outline" size="sm" onClick={exportCsv}><FileDown className="size-4" /> CSV</Button>
             <Button variant="outline" size="sm" onClick={exportTxt}><Download className="size-4" /> TXT</Button>
-            <Button size="sm"><Mail className="size-4" /> Email digest</Button>
+            <Button size="sm" onClick={exportPdf} disabled={pdfLoading}>
+              {pdfLoading ? <Loader2 className="size-4 animate-spin" /> : <FileText className="size-4" />}
+              {pdfLoading ? "Generating…" : "PDF"}
+            </Button>
+            <Button variant="outline" size="sm"><Mail className="size-4" /> Email digest</Button>
           </>
         }
       />
