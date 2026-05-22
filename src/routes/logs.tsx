@@ -6,10 +6,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Download, Copy, FileDown, Mail, Search, Filter } from "lucide-react";
+import { Download, Copy, FileDown, Mail, Search, Filter, FileText, Loader2 } from "lucide-react";
 import { SEGMENT_COLOR, SEGMENT_LABEL, fmtTime, fmtDate, today } from "@/lib/log-format";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
+import jsPDF from "jspdf";
+import autoTable from "jspdf-autotable";
 
 export const Route = createFileRoute("/logs")({ component: Logs });
 
